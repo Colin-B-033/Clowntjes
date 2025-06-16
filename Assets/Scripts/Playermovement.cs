@@ -21,14 +21,6 @@ public class Playermovement : MonoBehaviour
     public SlowUIController slowMoUI;
 
     public Transform playerCamera;
-    private float bobAmount = 0.1f;
-    private float bobDuration = 0.2f;
-    private float maxBobAmount = 0.9f;
-    private float bobVelocityScale = 0.1f;
-    private float prevYVelocity = 0f;
-
-    private bool wasGrounded = false;
-    private Coroutine bobCoroutine;
 
     public float groundDrag;
     public float jumpForce;
@@ -53,13 +45,13 @@ public class Playermovement : MonoBehaviour
     float verticalInput;
     Vector3 moveDirection;
     Rigidbody rb;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         readyToJump = true;
         slowMoAmount = maxSlowMoAmount;
-
     }
 
     private void Update()
@@ -67,8 +59,6 @@ public class Playermovement : MonoBehaviour
         float rayLength = playerHeight * 0.5f + 0.2f;
         Vector3 checkPosition = transform.position + Vector3.down * (rayLength - groundCheckRadius);
         grounded = Physics.CheckSphere(checkPosition, groundCheckRadius, whatIsGround);
-
-        prevYVelocity = rb.velocity.y;
 
         MyInput();
         SpeedControl();
@@ -115,15 +105,6 @@ public class Playermovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (grounded && !wasGrounded)
-        {
-            float landingVelocity = Mathf.Abs(prevYVelocity);
-            float dynamicBobAmount = Mathf.Clamp(landingVelocity * bobVelocityScale, bobAmount, maxBobAmount);
-
-            if (bobCoroutine != null) StopCoroutine(bobCoroutine);
-            bobCoroutine = StartCoroutine(CameraBob(dynamicBobAmount));
-        }
-        wasGrounded = grounded;
         MovePlayer();
     }
 
@@ -168,32 +149,6 @@ public class Playermovement : MonoBehaviour
     }
 
     private void ResetJump() => readyToJump = true;
-
-    private IEnumerator CameraBob(float dynamicAmount)
-    {
-        Vector3 startPos = playerCamera.localPosition;
-        Vector3 bobPos = startPos + Vector3.down * dynamicAmount;
-
-        float elapsed = 0f;
-        while (elapsed < bobDuration)
-        {
-            float t = elapsed / bobDuration;
-            playerCamera.localPosition = Vector3.Lerp(startPos, bobPos, t);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-        playerCamera.localPosition = bobPos;
-
-        elapsed = 0f;
-        while (elapsed < bobDuration)
-        {
-            float t = Mathf.SmoothStep(0, 1, elapsed / bobDuration);
-            playerCamera.localPosition = Vector3.Lerp(bobPos, startPos, t);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-        playerCamera.localPosition = startPos;
-    }
 
     private void OnDrawGizmosSelected()
     {
