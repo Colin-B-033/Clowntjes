@@ -1846,7 +1846,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 75
+  field of view: 100
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -3301,10 +3301,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTag: Player
   platform: {fileID: 289311599}
-HEAD:Assets/Scenes/Nielsscene.unity
-  platformMoveSpeed: 2
-
-parent of 359b80f (Updated files):Assets/Scenes/SampleScene.unity
 --- !u!65 &1781252825
 BoxCollider:
   m_ObjectHideFlags: 0
