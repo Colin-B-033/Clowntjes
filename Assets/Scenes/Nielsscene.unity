@@ -3329,7 +3329,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTag: Player
   platform: {fileID: 289311599}
-  moveSpeed: 0.001
+  platformMoveSpeed: 2
 --- !u!65 &1781252825
 BoxCollider:
   m_ObjectHideFlags: 0
