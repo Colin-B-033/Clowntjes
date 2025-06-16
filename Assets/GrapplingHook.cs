@@ -80,7 +80,7 @@ public class GrapplingHook : MonoBehaviour
 
             //The distance grapple will try to keep from grapple point.
             joint.maxDistance = distanceFromPoint * 0.8f; // Adjust as needed
-            joint.minDistance = distanceFromPoint * 0.25f; // Adjust as needed
+            joint.minDistance = distanceFromPoint * 0.5f; // Adjust as needed
 
             //change these values if needed
             joint.spring = 4.5f; // Adjust spring strength
