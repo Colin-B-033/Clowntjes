@@ -5,6 +5,8 @@ using System.Collections;
 public class PauseMenuController : MonoBehaviour
 {
     public GameObject pauseMenu;
+    public GameObject Truck;
+    public GameObject mainButtons;
     public GameObject Options;
     public GameObject LevelSelect;
     public Canvas PlayerUI;
@@ -12,7 +14,8 @@ public class PauseMenuController : MonoBehaviour
     private static bool isPaused = false;
     public static bool IsPaused => isPaused;
 
-    private void Awake()
+    private bool pendingCursorLock = false;
+    void Start()
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
@@ -20,12 +23,18 @@ public class PauseMenuController : MonoBehaviour
         pauseMenu.SetActive(false);
         Options.SetActive(false);
         LevelSelect.SetActive(false);
+        mainButtons.SetActive(false); // Hide main buttons at start
+
+        if (Truck != null)
+            Truck.SetActive(false);
+
         PlayerUI.enabled = true;
+
         UpdateCursorState();
     }
-
     void Update()
     {
+        // Toggle submenus
         if ((Options.activeSelf || LevelSelect.activeSelf) && Input.GetKeyDown(KeyCode.Escape))
         {
             if (Options.activeSelf) CloseOptions();
@@ -33,72 +42,116 @@ public class PauseMenuController : MonoBehaviour
             return;
         }
 
+        // Toggle pause
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePause();
+        }
 
+        // Backup: if somehow cursor is not locked, re-lock on click
+        if (!isPaused && Cursor.lockState != CursorLockMode.Locked && Input.GetMouseButtonDown(0))
+        {
+            LockCursor();
         }
     }
-
     public void TogglePause()
     {
         isPaused = !isPaused;
         pauseMenu.SetActive(isPaused);
+
+        if (Truck != null)
+            Truck.SetActive(isPaused);
+
         if (isPaused)
         {
             Options.SetActive(false);
             LevelSelect.SetActive(false);
             PlayerUI.enabled = false;
+            mainButtons.SetActive(true); // Show main buttons when paused
         }
         else
         {
             PlayerUI.enabled = true;
+            mainButtons.SetActive(false); // Hide main buttons when unpaused
         }
+
         Time.timeScale = isPaused ? 0 : 1;
         UpdateCursorState();
     }
-
     public void ResumeGame()
     {
         isPaused = false;
         pauseMenu.SetActive(false);
+
+        if (Truck != null)
+            Truck.SetActive(false);
+
         PlayerUI.enabled = true;
         Time.timeScale = 1;
-        StartCoroutine(DelayedCursorLock());
-    }
 
+        if (!Application.isFocused)
+        {
+            pendingCursorLock = true; // wait for focus
+        }
+        else
+        {
+            StartCoroutine(DelayedCursorLock()); // lock after UI deactivates
+        }
+    }
     private IEnumerator DelayedCursorLock()
     {
-        yield return null; // Wait one frame
-        UpdateCursorState();
+        yield return null; // wait one frame
+        LockCursor();
     }
 
+    private void LockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        Debug.Log("Cursor locked manually.");
+    }
+
+    private void UnlockCursor()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        Debug.Log("Cursor unlocked.");
+    }
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        if (hasFocus && pendingCursorLock)
+        {
+            LockCursor();
+            pendingCursorLock = false;
+        }
+    }
 
     public void OpenOptions()
     {
         Options.SetActive(true);
-        pauseMenu.SetActive(false);
+        mainButtons.SetActive(false);
         UpdateCursorState();
     }
-
     public void CloseOptions()
     {
         Options.SetActive(false);
-        pauseMenu.SetActive(true);
+        mainButtons.SetActive(true);
+        
         UpdateCursorState();
     }
 
     public void OpenLevelSelect()
     {
         LevelSelect.SetActive(true);
-        pauseMenu.SetActive(false);
+        mainButtons.SetActive(false);   
         UpdateCursorState();
     }
 
     public void CloseLevelSelect()
     {
         LevelSelect.SetActive(false);
-        pauseMenu.SetActive(true);
+        mainButtons.SetActive(true);
         UpdateCursorState();
     }
 
@@ -112,21 +165,18 @@ public class PauseMenuController : MonoBehaviour
     {
         Time.timeScale = 1;
         SceneManager.LoadScene(index);
+        TogglePause();
     }
+
     private void UpdateCursorState()
     {
-        // Always lock and hide the cursor when not paused and no submenus are open
         if (!isPaused)
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            Debug.Log("Cursor locked and hidden: " + Cursor.lockState + ", visible: " + Cursor.visible);
+            LockCursor();
         }
         else
         {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            Debug.Log("Cursor unlocked and visible: " + Cursor.lockState + ", visible: " + Cursor.visible);
+            UnlockCursor();
         }
     }
 }

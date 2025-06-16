@@ -4,9 +4,18 @@ using UnityEngine;
 
 public class FPSlimiter : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void ApplyGraphicsSettings(bool vsyncEnabled, int targetFps)
     {
-        Application.targetFrameRate = 61; 
+        QualitySettings.vSyncCount = vsyncEnabled ? 1 : 0;
+
+        if (vsyncEnabled)
+        {
+            Application.targetFrameRate = -1; // Let VSync control it
+        }
+        else
+        {
+            Application.targetFrameRate = targetFps; // Use your dropdown setting
+        }
     }
+
 }
