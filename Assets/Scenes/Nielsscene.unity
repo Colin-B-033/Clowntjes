@@ -3301,10 +3301,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTag: Player
   platform: {fileID: 289311599}
-<<<<<<< HEAD:Assets/Scenes/Nielsscene.unity
+HEAD:Assets/Scenes/Nielsscene.unity
   platformMoveSpeed: 2
-=======
->>>>>>> parent of 359b80f (Updated files):Assets/Scenes/SampleScene.unity
+
+parent of 359b80f (Updated files):Assets/Scenes/SampleScene.unity
 --- !u!65 &1781252825
 BoxCollider:
   m_ObjectHideFlags: 0
