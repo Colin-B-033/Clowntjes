@@ -48,8 +48,8 @@ public class PauseMenuController : MonoBehaviour
             TogglePause();
         }
 
-        // Backup: if somehow cursor is not locked, re-lock on click
-        if (!isPaused && Cursor.lockState != CursorLockMode.Locked && Input.GetMouseButtonDown(0))
+        FinishLine finishLine = FindObjectOfType<FinishLine>();
+        if (!isPaused && Cursor.lockState != CursorLockMode.Locked && Input.GetMouseButtonDown(0) && finishLine != null && finishLine.isFinished == false)
         {
             LockCursor();
         }
