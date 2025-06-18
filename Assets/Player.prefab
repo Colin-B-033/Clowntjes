@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 3123391647801294206}
   - component: {fileID: 5687138291127541228}
   - component: {fileID: 4810787837767337298}
+  - component: {fileID: 1382490336435394504}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -111,8 +112,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 926595862562a0740927f23dc0ddcc10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 7
-  slowMoKey: 101
+  moveSpeed: 12
+  slowMoKey: 278
   slowMoUI: {fileID: 8241571414473579742}
   playerCamera: {fileID: 0}
   groundDrag: 5
@@ -126,7 +127,7 @@ MonoBehaviour:
   groundCheckRadius: 0.4
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   orientation: {fileID: 6122513282726423723}
 --- !u!114 &8241571414473579742
 MonoBehaviour:
@@ -242,6 +243,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 2.1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1382490336435394504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178581185896611408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad24de71a50a18f4c9fa03cbc77090f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2091526862885498306
 GameObject:
   m_ObjectHideFlags: 0

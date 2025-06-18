@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8529053886827879532}
   - component: {fileID: 7182892814310570624}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Truck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -230,7 +230,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 119451728677830643}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 1000
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -268,8 +268,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.4732583, y: 3.3390687, z: 12}
-  m_Center: {x: 0.0000038146973, y: 2.1, z: -3.5}
+  m_Size: {x: 3.2, y: 3.8, z: 12}
+  m_Center: {x: 0.0000038146973, y: 1.9, z: -3.5}
 --- !u!1001 &454946404469613709
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -406,7 +406,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 454946404469645861}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 1000
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}

@@ -46,6 +46,10 @@ public class Playermovement : MonoBehaviour
     Vector3 moveDirection;
     Rigidbody rb;
 
+    // Platform tracking
+    private Vector3 platformVelocity = Vector3.zero;
+    private Rigidbody currentPlatformRb = null;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -65,7 +69,7 @@ public class Playermovement : MonoBehaviour
 
         rb.drag = grounded ? groundDrag : 0f;
 
-        // Handle slow motion toggle and resource
+        // Slow motion input and control
         if (Input.GetKeyDown(slowMoKey))
         {
             if (!isSlowMo && slowMoAmount > 0f)
@@ -81,6 +85,7 @@ public class Playermovement : MonoBehaviour
                 slowMoCoroutine = StartCoroutine(SmoothTimeScaleTransition(1f));
             }
         }
+
         if (isSlowMo)
         {
             slowMoAmount -= slowMoDepleteRate * Time.unscaledDeltaTime;
@@ -96,6 +101,7 @@ public class Playermovement : MonoBehaviour
         {
             slowMoAmount = Mathf.Min(slowMoAmount + regenRate * Time.unscaledDeltaTime, maxSlowMoAmount);
         }
+
         if (slowMoUI != null)
         {
             slowMoUI.UpdateSlider(slowMoAmount, maxSlowMoAmount, isSlowMo);
@@ -105,6 +111,7 @@ public class Playermovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        UpdatePlatformVelocity();
         MovePlayer();
     }
 
@@ -118,7 +125,6 @@ public class Playermovement : MonoBehaviour
             readyToJump = false;
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
-            Debug.Log("Jumped");
         }
     }
 
@@ -135,20 +141,56 @@ public class Playermovement : MonoBehaviour
     private void SpeedControl()
     {
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        if (flatVel.magnitude > currentSpeed)
+        Vector3 flatPlatformVel = new Vector3(platformVelocity.x, 0f, platformVelocity.z);
+
+        // Player-only velocity (subtract platform's)
+        Vector3 playerOnlyVel = flatVel - flatPlatformVel;
+
+        if (playerOnlyVel.magnitude > currentSpeed)
         {
-            Vector3 limitedVel = flatVel.normalized * currentSpeed;
-            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            Vector3 limitedPlayerVel = playerOnlyVel.normalized * currentSpeed;
+            Vector3 newFlatVel = flatPlatformVel + limitedPlayerVel;
+            rb.velocity = new Vector3(newFlatVel.x, rb.velocity.y, newFlatVel.z);
         }
     }
 
     private void Jump()
     {
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
+        // Add horizontal platform momentum
+        if (platformVelocity != Vector3.zero)
+        {
+            Vector3 horizontalPlatformVel = new Vector3(platformVelocity.x, 0f, platformVelocity.z);
+            rb.AddForce(horizontalPlatformVel, ForceMode.VelocityChange);
+        }
     }
 
     private void ResetJump() => readyToJump = true;
+
+    private void UpdatePlatformVelocity()
+    {
+        if (grounded)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, playerHeight * 0.5f + 0.3f))
+            {
+                Rigidbody hitRb = hit.collider.attachedRigidbody;
+
+                if (hitRb != null && !hitRb.isKinematic)
+                {
+                    currentPlatformRb = hitRb;
+                    platformVelocity = hitRb.velocity;
+                    return;
+                }
+            }
+        }
+
+        // If not grounded or platform has no rigidbody
+        currentPlatformRb = null;
+        platformVelocity = Vector3.zero;
+    }
 
     private void OnDrawGizmosSelected()
     {
