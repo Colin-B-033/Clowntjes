@@ -15,6 +15,8 @@ public class PlayerCam : MonoBehaviour
     float yRotation;
     private void Update()
     {
+        if (playerdeath.IsRetryMenuActive)
+            return;
         if (PauseMenuController.IsPaused)
             return;
 
@@ -28,7 +30,6 @@ public class PlayerCam : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
         orientation.rotation = Quaternion.Euler(0, yRotation, 0);
-        
     }
-   
+
 }
