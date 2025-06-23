@@ -5671,7 +5671,6 @@ PrefabInstance:
     - target: {fileID: 362863914818335655, guid: aef22db0e407b5749a19697fb096a09a, type: 3}
       propertyPath: playercam
       value: 
-<<<<<<< Updated upstream
       objectReference: {fileID: 0}
     - target: {fileID: 487936780148594438, guid: aef22db0e407b5749a19697fb096a09a, type: 3}
       propertyPath: deathSound
@@ -5685,9 +5684,6 @@ PrefabInstance:
       propertyPath: retryMenuUI
       value: 
       objectReference: {fileID: 855501404}
-=======
-      objectReference: {fileID: 335356123}
->>>>>>> Stashed changes
     - target: {fileID: 1178581185896611408, guid: aef22db0e407b5749a19697fb096a09a, type: 3}
       propertyPath: m_Name
       value: Player
@@ -17652,10 +17648,5 @@ SceneRoots:
   - {fileID: 418229027}
   - {fileID: 163018261}
   - {fileID: 759147071}
-<<<<<<< Updated upstream
   - {fileID: 273405902}
   - {fileID: 855501408}
-=======
-  - {fileID: 1170516387}
-  - {fileID: 123545477}
->>>>>>> Stashed changes
