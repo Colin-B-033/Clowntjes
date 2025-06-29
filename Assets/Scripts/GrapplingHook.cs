@@ -10,6 +10,9 @@ public class GrapplingHook : MonoBehaviour
     public Transform Guntip, playercam, player;
     private float maxDistance = 15f; // Maximum distance for grappling
     private SpringJoint joint;
+    private Transform grappledTransform;
+    private Vector3 grappledLocalPoint;
+
 
     private GameObject aimIndicator; // Blue sphere indicator
     private bool isGrappling = false;
@@ -45,6 +48,15 @@ public class GrapplingHook : MonoBehaviour
         {
             StopGrapple();
         }
+        if (isGrappling && grappledTransform != null)
+        {
+            GrapplePoint = grappledTransform.TransformPoint(grappledLocalPoint);
+            if (joint != null)
+            {
+                joint.connectedAnchor = GrapplePoint;
+                aimIndicator.transform.position = GrapplePoint; // Update aim indicator position
+            }
+        }
     }
 
     private void LateUpdate()
@@ -72,6 +84,8 @@ public class GrapplingHook : MonoBehaviour
         if (Physics.Raycast(playercam.position, playercam.forward, out hit, maxDistance, grappleableLayer))
         {
             GrapplePoint = hit.point;
+            grappledTransform = hit.transform;
+            grappledLocalPoint = grappledTransform.InverseTransformPoint(GrapplePoint);
             joint = player.gameObject.AddComponent<SpringJoint>();
             joint.autoConfigureConnectedAnchor = false;
             joint.connectedAnchor = GrapplePoint;
@@ -83,7 +97,7 @@ public class GrapplingHook : MonoBehaviour
             joint.minDistance = distanceFromPoint * 0.25f; // Adjust as needed
 
             //change these values if needed
-            joint.spring = 4.5f; // Adjust spring strength
+            joint.spring = 20f; // Adjust spring strength
             joint.damper = 7f; // Adjust damper for smoother movement
             joint.massScale = 4.5f; // Adjust mass scale for the joint
 
@@ -108,5 +122,7 @@ public class GrapplingHook : MonoBehaviour
         Destroy(joint);
         isGrappling = false;
         aimIndicator.SetActive(false);
+        grappledTransform = null;
     }
+
 }

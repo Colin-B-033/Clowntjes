@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 12
-  slowMoKey: 278
+  slowMoKey: 101
   slowMoUI: {fileID: 8241571414473579742}
   playerCamera: {fileID: 0}
   groundDrag: 5
@@ -124,8 +124,8 @@ MonoBehaviour:
   jumpKey: 32
   sprintKey: 304
   sprintMultiplier: 2
-  playerHeight: 1.75
-  groundCheckRadius: 0.4
+  playerHeight: 2.5
+  groundCheckRadius: 0.45
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
@@ -270,6 +270,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   retryMenuUI: {fileID: 0}
   retryButton: {fileID: 0}
+  deathSound: {fileID: 0}
 --- !u!1 &2091526862885498306
 GameObject:
   m_ObjectHideFlags: 0

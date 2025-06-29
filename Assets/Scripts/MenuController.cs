@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.Scripting;
+using UnityEngine.UI;
+using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
+
 
 public class PauseMenuController : MonoBehaviour
 {
@@ -34,7 +38,8 @@ public class PauseMenuController : MonoBehaviour
     }
     void Update()
     {
-        // Toggle submenus
+        if (UIBlocker.IsBlockingUIOpen) return;
+        // Handle cursor locking/unlocking based on focus
         if ((Options.activeSelf || LevelSelect.activeSelf) && Input.GetKeyDown(KeyCode.Escape))
         {
             if (Options.activeSelf) CloseOptions();
@@ -56,6 +61,7 @@ public class PauseMenuController : MonoBehaviour
     }
     public void TogglePause()
     {
+        if (UIBlocker.IsBlockingUIOpen) return;
         isPaused = !isPaused;
         pauseMenu.SetActive(isPaused);
 

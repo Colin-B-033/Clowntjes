@@ -1,7 +1,9 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.Scripting;
 using UnityEngine.UI;
-
+using TMPro;
+using UnityEngine.SceneManagement;
+using System.Collections;
 public class playerdeath : MonoBehaviour
 {
     public static bool IsRetryMenuActive { get; private set; }
@@ -43,6 +45,7 @@ public class playerdeath : MonoBehaviour
             retryMenuUI.SetActive(true);
 
         IsRetryMenuActive = true;
+        UIBlocker.IsBlockingUIOpen = true; // Block other UI
 
         // Play death sound
         if (deathSound != null && audioSource != null)
@@ -59,6 +62,8 @@ public class playerdeath : MonoBehaviour
     {
         Time.timeScale = 1f;
         IsRetryMenuActive = false;
+        UIBlocker.IsBlockingUIOpen = false; // Unblock UI
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
 }

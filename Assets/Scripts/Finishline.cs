@@ -1,8 +1,9 @@
 using UnityEngine;
+using UnityEngine.Scripting;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
-
+using System.Collections;
 public class FinishLine : MonoBehaviour
 {
     public GameObject finishMenuUI;
@@ -14,6 +15,8 @@ public class FinishLine : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            
+
             LevelTimer.Instance.StopTimer();
 
             float finalTime = LevelTimer.Instance.GetTime();
@@ -23,12 +26,15 @@ public class FinishLine : MonoBehaviour
             scoreText.text = $"Score: {score}";
 
             finishMenuUI.SetActive(true);
-            Time.timeScale = 0f; // Optional: Pause game
-            Cursor.lockState = CursorLockMode.None; // Unlock cursor when finishing the level
-            Cursor.visible = true; // Make cursor visible
+            Time.timeScale = 0f;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             isFinished = true;
+            UIBlocker.IsBlockingUIOpen = true; // Block other UI
         }
+
     }
+
 
     private int CalculateScore(float time)
     {
