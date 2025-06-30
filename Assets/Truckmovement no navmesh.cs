@@ -10,7 +10,7 @@ public class TruckMovementnonav : MonoBehaviour
 
     void Start()
     {
-        finalSpeed = Random.Range(MovementSpeed, MovementSpeed + 7f);
+        finalSpeed = Random.Range(MovementSpeed, MovementSpeed + 2f);
 
         // Optionally randomize drag if Rigidbody still exists
         Rigidbody rb = transform.GetChild(0).GetComponent<Rigidbody>();

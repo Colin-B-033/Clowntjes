@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System;
 
 
 public class PauseMenuController : MonoBehaviour
@@ -14,6 +15,7 @@ public class PauseMenuController : MonoBehaviour
     public GameObject Options;
     public GameObject LevelSelect;
     public Canvas PlayerUI;
+    public Boolean istrigger = false;
 
     private static bool isPaused = false;
     public static bool IsPaused => isPaused;
@@ -23,15 +25,18 @@ public class PauseMenuController : MonoBehaviour
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
-
-        pauseMenu.SetActive(false);
-        Options.SetActive(false);
-        LevelSelect.SetActive(false);
-        mainButtons.SetActive(false); // Hide main buttons at start
-
-        if (Truck != null)
+        if (istrigger == true)
+        {
+            pauseMenu.SetActive(false);
+            Options.SetActive(false);
+            LevelSelect.SetActive(false);
+            mainButtons.SetActive(false); // Hide main buttons at start
+        }
+        if (Truck != null && istrigger == true)
             Truck.SetActive(false);
-
+        if (!istrigger) {
+            isPaused = true;
+        }
         PlayerUI.enabled = true;
 
         UpdateCursorState();
