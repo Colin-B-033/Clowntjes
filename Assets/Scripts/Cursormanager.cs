@@ -3,16 +3,7 @@ using UnityEngine;
 public class FocusFixer : MonoBehaviour
 {
     private static FocusFixer instance;
-    private void Awake()
-    {
-        if (instance != null && instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
+    
     void Start()
     {
         // Force focus back to the game window (may help in editor/testing)

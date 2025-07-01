@@ -1,22 +1,30 @@
 using UnityEngine;
-using UnityEngine.Scripting;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
+
 public class FinishLine : MonoBehaviour
 {
     public GameObject finishMenuUI;
     public TextMeshProUGUI timeText;
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI highscoreText; // Add this in your UI and assign in Inspector
     public bool isFinished = false;
+
+    private const string HighscoreKey = "Highscore";
+
+    private void Start()
+    {
+        isFinished = false;
+        if (finishMenuUI != null)
+            finishMenuUI.SetActive(false);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !isFinished)
         {
-            
-
             LevelTimer.Instance.StopTimer();
 
             float finalTime = LevelTimer.Instance.GetTime();
@@ -25,16 +33,25 @@ public class FinishLine : MonoBehaviour
             timeText.text = $"Time: {finalTime:F2} seconds";
             scoreText.text = $"Score: {score}";
 
+            // Highscore logic
+            int highscore = PlayerPrefs.GetInt(HighscoreKey, 0);
+            if (score > highscore)
+            {
+                highscore = score;
+                PlayerPrefs.SetInt(HighscoreKey, highscore);
+                PlayerPrefs.Save();
+            }
+            if (highscoreText != null)
+                highscoreText.text = $"Highscore: {highscore}";
+
             finishMenuUI.SetActive(true);
             Time.timeScale = 0f;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             isFinished = true;
-            UIBlocker.IsBlockingUIOpen = true; // Block other UI
+            UIBlocker.IsBlockingUIOpen = true;
         }
-
     }
-
 
     private int CalculateScore(float time)
     {

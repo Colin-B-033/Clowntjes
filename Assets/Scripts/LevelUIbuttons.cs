@@ -4,13 +4,24 @@ using UnityEngine.SocialPlatforms;
 
 public class LevelUIButtons : MonoBehaviour
 {
-    // Optionally assign in Inspector, or find at runtime
     public GameObject finishMenuUI;
 
-    // Call this from your "Next Level" button
+    private void Awake()
+    {
+        // Don't cache finishMenuUI here if this object persists across scenes!
+    }
+
+    private void OnEnable()
+    {
+        // Always reacquire the reference after scene load
+        FinishLine finishLine = FindObjectOfType<FinishLine>();
+        if (finishLine != null)
+            finishMenuUI = finishLine.finishMenuUI;
+    }
+
     public void LoadNextScene()
     {
-        // Try to find the FinishLine if not assigned
+        // Reacquire reference in case scene changed
         if (finishMenuUI == null)
         {
             FinishLine finishLine = FindObjectOfType<FinishLine>();
@@ -18,15 +29,11 @@ public class LevelUIButtons : MonoBehaviour
                 finishMenuUI = finishLine.finishMenuUI;
         }
 
-        // Hide finish menu UI if open
         if (finishMenuUI != null)
             finishMenuUI.SetActive(false);
 
-        // Reset time scale and UI blocker
         Time.timeScale = 1f;
         UIBlocker.IsBlockingUIOpen = false;
-
-        // Optionally reset cursor state
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -36,7 +43,6 @@ public class LevelUIButtons : MonoBehaviour
         else
             Debug.LogWarning("No next scene in build settings!");
     }
-
     // Call this from your "Retry" button
     public void ReloadCurrentScene()
     {
