@@ -8,7 +8,7 @@ public class GrapplingHook : MonoBehaviour
     private Vector3 GrapplePoint;
     public LayerMask grappleableLayer;
     public Transform Guntip, playercam, player;
-    private float maxDistance = 15f; // Maximum distance for grappling
+    private float maxDistance = 25f; // Maximum distance for grappling
     private SpringJoint joint;
     private Transform grappledTransform;
     private Vector3 grappledLocalPoint;
