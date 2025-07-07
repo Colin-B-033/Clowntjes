@@ -12,7 +12,7 @@ public class FinishLine : MonoBehaviour
     public TextMeshProUGUI highscoreText; // Add this in your UI and assign in Inspector
     public bool isFinished = false;
 
-    private const string HighscoreKey = "Highscore";
+    private string HighscoreKey => $"Highscore_{SceneManager.GetActiveScene().name}";
 
     private void Start()
     {
